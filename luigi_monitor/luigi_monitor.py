@@ -205,9 +205,7 @@ m = Monitor()
 
 @contextmanager
 def monitor(**kwargs):
-    config = luigi_monitor().get_params()
-    print(config)
-    print(luigi_monitor.__dict__)
+    config = luigi_monitor().param_kwargs
     if 'events' not in kwargs:
         kwargs['events'] = ['FAILURE', 'DEPENDENCY_MISSING', 'SUCCESS']
 
@@ -230,7 +228,7 @@ def monitor(**kwargs):
 #     try:
 #         run_luigi(sys.argv[1:])
 #     except SystemExit:
-#         send_message(luigi_monitor.get_params())
+#         send_message(luigi_monitor.param_kwargs)
 #
 #
 # def parse_sys_args(args):
