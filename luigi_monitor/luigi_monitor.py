@@ -187,16 +187,16 @@ def send_message(**kwargs):
     host = kwargs.get('host')
 
     msg = format_message(max_print, host)
-    if not slack_url:
+    if not slack_url and msg:
         logger.warn("slack_url not provided. Message will not be sent.\n{}".format(msg))
         return False
-
-    payload = {"text": msg}
-    if username:
-        payload['username'] = username
-    r = requests.post(slack_url, data=json.dumps(payload))
-    if r.status_code != 200:
-        raise Exception(r.text)
+    if msg:
+        payload = {"text": msg}
+        if username:
+            payload['username'] = username
+        r = requests.post(slack_url, data=json.dumps(payload))
+        if r.status_code != 200:
+            raise Exception(r.text)
     return True
 
 
