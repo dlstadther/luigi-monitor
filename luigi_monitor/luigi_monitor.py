@@ -204,12 +204,15 @@ m = Monitor()
 
 
 @contextmanager
-def monitor(events=['FAILURE', 'DEPENDENCY_MISSING', 'SUCCESS'], slack_url=None, max_print=5, username=None, host=None):
+def monitor(**kwargs):
+    if 'events' not in kwargs:
+        kwargs['events'] = ['FAILURE', 'DEPENDENCY_MISSING', 'SUCCESS']
+
+    events = kwargs.get('events')
     if events:
         m.notify_events = events
         set_handlers(events)
     yield m
-    kwargs = {'slack_url': slack_url, 'max_print': max_print, 'username': username, 'host': host}
     send_message(**kwargs)
 
 
