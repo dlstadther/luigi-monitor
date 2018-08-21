@@ -26,11 +26,13 @@ class luigi_monitor(luigi.Config):
 
 
 class Monitor:
-    recorded_events = defaultdict(list)
-    notify_events = None
-    core_module = None
-    root_task = None
-    root_task_parameters = None
+
+    def __init__(self):
+        self.recorded_events = defaultdict(list)
+        self.notify_events = None
+        self.core_module = None
+        self.root_task = None
+        self.root_task_parameters = None
 
     def is_success_only(self):
         success_only = True
