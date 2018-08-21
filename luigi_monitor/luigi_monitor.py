@@ -124,6 +124,7 @@ def format_message(max_print, host):
     text = []
     emoji = ":x:"
 
+    # format msg for failures
     if m.has_failed_tasks() and 'FAILURE' in m.notify_events:
         text.append(add_context_to_message("failed", const_failed_message))
         text.append("\t\t\t*Failures:*")
@@ -133,6 +134,7 @@ def format_message(max_print, host):
             for failure in m.recorded_events['FAILURE']:
                 text.append("\t\t\t\tTask: {}; Exception: {}".format(failure['task'], failure['exception']))
 
+    # format msg for missing dependencies
     if m.has_missing_tasks() and 'DEPENDENCY_MISSING' in m.notify_events:
         text.append(add_context_to_message("could not be completed", const_missing_message))
         text.append("\t\t\t*Tasks with missing dependencies:*")
@@ -142,7 +144,7 @@ def format_message(max_print, host):
             for missing in m.recorded_events['DEPENDENCY_MISSING']:
                 text.append("\t\t\t\t" + missing)
 
-    # if job successful add success message
+    # format msg for success
     if m.is_success_only() and 'SUCCESS' in m.notify_events:
         emoji = ":heavy_check_mark:"
         text.append(add_context_to_message("ran successfully", const_success_message))
