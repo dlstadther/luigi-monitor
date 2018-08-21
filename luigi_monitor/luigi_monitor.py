@@ -213,30 +213,30 @@ def monitor(events=['FAILURE', 'DEPENDENCY_MISSING', 'SUCCESS'], slack_url=None,
     send_message(**kwargs)
 
 
-def run():
-    """Command line entry point for luigi-monitor"""
-    events = ['FAILURE', 'DEPENDENCY_MISSING', 'SUCCESS']
-    m.notify_events = events
-    set_handlers(events)
-    parse_sys_args(sys.argv)
-    try:
-        run_luigi(sys.argv[1:])
-    except SystemExit:
-        send_message(luigi_monitor.get_params())
-
-
-def parse_sys_args(args):
-    """Parse commandline arguments"""
-    contains_core_module = False
-    if len(args) >= 4:
-        if args[1] == "--module":
-            contains_core_module = True
-            m.core_module = args[2]
-    if contains_core_module:
-        m.root_task = args[3]
-        if len(args) > 4:
-            m.root_task_parameters = args[4:]
-    else:
-        m.root_task = args[1]
-        if len(args) > 2:
-            m.root_task_parameters = args[2:]
+# def run():
+#     """Command line entry point for luigi-monitor"""
+#     events = ['FAILURE', 'DEPENDENCY_MISSING', 'SUCCESS']
+#     m.notify_events = events
+#     set_handlers(events)
+#     parse_sys_args(sys.argv)
+#     try:
+#         run_luigi(sys.argv[1:])
+#     except SystemExit:
+#         send_message(luigi_monitor.get_params())
+#
+#
+# def parse_sys_args(args):
+#     """Parse commandline arguments"""
+#     contains_core_module = False
+#     if len(args) >= 4:
+#         if args[1] == "--module":
+#             contains_core_module = True
+#             m.core_module = args[2]
+#     if contains_core_module:
+#         m.root_task = args[3]
+#         if len(args) > 4:
+#             m.root_task_parameters = args[4:]
+#     else:
+#         m.root_task = args[1]
+#         if len(args) > 2:
+#             m.root_task_parameters = args[2:]
