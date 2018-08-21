@@ -205,15 +205,18 @@ m = Monitor()
 
 @contextmanager
 def monitor(**kwargs):
+    config = luigi_monitor().get_params()
     if 'events' not in kwargs:
         kwargs['events'] = ['FAILURE', 'DEPENDENCY_MISSING', 'SUCCESS']
 
-    events = kwargs.get('events')
+    config.update(**kwargs)
+
+    events = config.get('events')
     if events:
         m.notify_events = events
         set_handlers(events)
     yield m
-    send_message(**kwargs)
+    send_message(**config)
 
 
 # def run():
