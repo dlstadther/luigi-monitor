@@ -206,6 +206,8 @@ m = Monitor()
 @contextmanager
 def monitor(**kwargs):
     config = luigi_monitor().get_params()
+    print(config)
+    print(luigi_monitor.__dict__)
     if 'events' not in kwargs:
         kwargs['events'] = ['FAILURE', 'DEPENDENCY_MISSING', 'SUCCESS']
 
