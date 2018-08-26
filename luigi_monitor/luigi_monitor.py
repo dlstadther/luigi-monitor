@@ -42,16 +42,16 @@ def start(task):
 
 def failure(task, exception):
     task = str(task)
-    failure = {'task': task, 'exception': str(exception)}
-    m.recorded_events['FAILURE'].append(failure)
+    failure_ = {'task': task, 'exception': str(exception)}
+    m.recorded_events['FAILURE'].append(failure_)
 
 
 def success(task):
     task = str(task)
-    m.recorded_events['FAILURE'] = [failure for failure in m.recorded_events['FAILURE']
-                                    if task not in failure['task']]
-    m.recorded_events['DEPENDENCY_MISSING'] = [missing for missing in m.recorded_events['DEPENDENCY_MISSING']
-                                               if task not in missing]
+    m.recorded_events['FAILURE'] = [failure_ for failure_ in m.recorded_events['FAILURE']
+                                    if task not in failure_['task']]
+    m.recorded_events['DEPENDENCY_MISSING'] = [missing_ for missing_ in m.recorded_events['DEPENDENCY_MISSING']
+                                               if task not in missing_]
     m.recorded_events['SUCCESS'].append(task)
 
 
@@ -79,8 +79,8 @@ def set_handlers(events):
         if event not in event_map:
             raise Exception("{} is not a valid event.".format(event))
         handler = event_map[event]['handler']
-        function = event_map[event]['function']
-        luigi.Task.event_handler(handler)(function)
+        function_ = event_map[event]['function']
+        luigi.Task.event_handler(handler)(function_)
 
 
 class luigi_monitor(luigi.Config):
@@ -131,8 +131,8 @@ def format_message(max_print, host):
         if len(m.recorded_events['FAILURE']) > int(max_print):
             text.append("\t\t\tMore than {} failures. Please check logs.".format(max_print))
         else:
-            for failure in m.recorded_events['FAILURE']:
-                text.append("\t\t\t\tTask: {}; Exception: {}".format(failure['task'], failure['exception']))
+            for failure_ in m.recorded_events['FAILURE']:
+                text.append("\t\t\t\tTask: {}; Exception: {}".format(failure_['task'], failure_['exception']))
 
     # format msg for missing dependencies
     if m.has_missing_tasks() and 'DEPENDENCY_MISSING' in m.notify_events:
@@ -141,8 +141,8 @@ def format_message(max_print, host):
         if len(m.recorded_events['DEPENDENCY_MISSING']) > int(max_print):
             text.append("\t\t\t\tMore than {} tasks with missing dependencies. Please check logs.".format(max_print))
         else:
-            for missing in m.recorded_events['DEPENDENCY_MISSING']:
-                text.append("\t\t\t\t" + missing)
+            for missing_ in m.recorded_events['DEPENDENCY_MISSING']:
+                text.append("\t\t\t\t" + missing_)
 
     # format msg for success
     if m.is_success_only() and 'SUCCESS' in m.notify_events:
