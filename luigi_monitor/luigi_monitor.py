@@ -14,9 +14,9 @@ import requests
 
 logger = logging.getLogger('luigi-interface')
 
-const_success_message = "Task ran successfully!"
-const_failed_message = "Task failed!"
-const_missing_message = "Task could not be completed!"
+MESSAGE_SUCCESS = "Task ran successfully!"
+MESSAGE_FAILURE = "Task failed!"
+MESSAGE_MISSING = "Task could not be completed!"
 
 
 def discovered(task, dependency):
@@ -126,7 +126,7 @@ def format_message(max_print, host):
 
     # format msg for failures
     if m.has_failed_tasks() and 'FAILURE' in m.notify_events:
-        text.append(add_context_to_message("failed", const_failed_message))
+        text.append(add_context_to_message("failed", MESSAGE_FAILURE))
         text.append("\t\t\t*Failures:*")
         if len(m.recorded_events['FAILURE']) > int(max_print):
             text.append("\t\t\tMore than {} failures. Please check logs.".format(max_print))
@@ -136,7 +136,7 @@ def format_message(max_print, host):
 
     # format msg for missing dependencies
     if m.has_missing_tasks() and 'DEPENDENCY_MISSING' in m.notify_events:
-        text.append(add_context_to_message("could not be completed", const_missing_message))
+        text.append(add_context_to_message("could not be completed", MESSAGE_MISSING))
         text.append("\t\t\t*Tasks with missing dependencies:*")
         if len(m.recorded_events['DEPENDENCY_MISSING']) > int(max_print):
             text.append("\t\t\t\tMore than {} tasks with missing dependencies. Please check logs.".format(max_print))
@@ -147,7 +147,7 @@ def format_message(max_print, host):
     # format msg for success
     if m.is_success_only() and 'SUCCESS' in m.notify_events:
         emoji = ":heavy_check_mark:"
-        text.append(add_context_to_message("ran successfully", const_success_message))
+        text.append(add_context_to_message("ran successfully", MESSAGE_SUCCESS))
         text.append("\t\t\t*Following {} tasks succeeded:*".format(len(m.recorded_events['SUCCESS'])))
         for succeeded in m.recorded_events['SUCCESS']:
             text.append("\t\t\t\t{}".format(succeeded))
