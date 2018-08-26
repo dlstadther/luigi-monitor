@@ -19,38 +19,6 @@ const_failed_message = "Task failed!"
 const_missing_message = "Task could not be completed!"
 
 
-class luigi_monitor(luigi.Config):
-    slack_url = luigi.Parameter(default=None)
-    max_print = luigi.IntParameter(default=5)
-    username = luigi.Parameter(default=None)
-
-
-class Monitor:
-
-    def __init__(self):
-        self.recorded_events = defaultdict(list)
-        self.notify_events = None
-        self.core_module = None
-        self.root_task = None
-        self.root_task_parameters = None
-
-    def is_success_only(self):
-        success_only = True
-        for k, i in self.recorded_events.items():
-            if k == 'SUCCESS' and len(i) > 0:
-                success_only = success_only and True
-            elif len(i) > 0:
-                success_only = success_only and False
-                break
-        return success_only
-
-    def has_missing_tasks(self):
-        return True if self.recorded_events['DEPENDENCY_MISSING'] else False
-
-    def has_failed_tasks(self):
-        return True if self.recorded_events['FAILURE'] else False
-
-
 def discovered(task, dependency):
     raise NotImplementedError
 
@@ -113,6 +81,38 @@ def set_handlers(events):
         handler = event_map[event]['handler']
         function = event_map[event]['function']
         luigi.Task.event_handler(handler)(function)
+
+
+class luigi_monitor(luigi.Config):
+    slack_url = luigi.Parameter(default=None)
+    max_print = luigi.IntParameter(default=5)
+    username = luigi.Parameter(default=None)
+
+
+class Monitor:
+
+    def __init__(self):
+        self.recorded_events = defaultdict(list)
+        self.notify_events = None
+        self.core_module = None
+        self.root_task = None
+        self.root_task_parameters = None
+
+    def is_success_only(self):
+        success_only = True
+        for k, i in self.recorded_events.items():
+            if k == 'SUCCESS' and len(i) > 0:
+                success_only = success_only and True
+            elif len(i) > 0:
+                success_only = success_only and False
+                break
+        return success_only
+
+    def has_missing_tasks(self):
+        return True if self.recorded_events['DEPENDENCY_MISSING'] else False
+
+    def has_failed_tasks(self):
+        return True if self.recorded_events['FAILURE'] else False
 
 
 # TODO: add configurability
