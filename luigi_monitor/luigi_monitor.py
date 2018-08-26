@@ -1,12 +1,12 @@
 from __future__ import print_function
+from collections import defaultdict
+from contextlib import contextmanager
 import inspect
 import json
 import logging
 import os
-import sys
 import platform
-from collections import defaultdict
-from contextlib import contextmanager
+import sys
 
 import luigi
 from luigi.retcodes import run_with_retcodes as run_luigi
