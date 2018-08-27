@@ -102,9 +102,9 @@ class Monitor:
         success_only = True
         for k, i in self.recorded_events.items():
             if k == 'SUCCESS' and len(i) > 0:
-                success_only = success_only and True
+                continue
             elif len(i) > 0:
-                success_only = success_only and False
+                success_only = False
                 break
         return success_only
 
